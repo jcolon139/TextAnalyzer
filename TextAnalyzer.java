@@ -23,9 +23,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyStore.Entry;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class TextAnalyzer {
 
@@ -45,6 +51,18 @@ public class TextAnalyzer {
 				wordCount.put(word, count);
 			}	
 			fileScan.close();
-			System.out.println(wordCount);
+			
+			//Map key sorting
+			Map<String, Integer> sortedWordCount = wordCount.entrySet().stream()
+					.sorted(Comparator.comparingInt(e-> -e.getValue()))
+					.collect(Collectors.toMap(
+							Map.Entry::getKey,
+							Map.Entry::getValue,
+							(a, b) -> {throw new AssertionError(); },
+							LinkedHashMap::new
+							));
+			
+			sortedWordCount.entrySet().forEach(System.out::println);
+			
 	}
 }
