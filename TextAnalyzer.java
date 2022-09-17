@@ -1,5 +1,5 @@
 /*Javier Colon Morales
- * 09-08-2022
+ * 09-16-2022
  * CEN-3024C Software Development 1
  * Professor Mary Walauskis
  * 
@@ -23,25 +23,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyStore.Entry;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.stream.Collectors;
+
 
 public class TextAnalyzer {
 
 	public static void main(String[] args) throws IOException {
 			BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\Users\\jcol_\\Desktop\\School Folder\\Bachelors Computing and Software Development Classes\\6_Fall 2022\\Software Development 1\\Module 2\\theRaven.txt"));
 			Scanner fileScan = new Scanner(reader);
-			Map<String, Integer> wordCount = new HashMap<String, Integer>();
+			LinkedHashMap<String, Integer> wordCount = new LinkedHashMap<>();
 			
 			while(fileScan.hasNextLine()) {
 				String word = fileScan.next();
+				word = word.toLowerCase();
+				word = word.replaceAll("[^a-zA-Z ]", "");
 				Integer count = wordCount.get(word);
 				
 				if (count != null)
@@ -50,19 +52,30 @@ public class TextAnalyzer {
 					count = 1;
 				wordCount.put(word, count);
 			}	
+			
 			fileScan.close();
+
+			List<Map.Entry<String, Integer> > list = new ArrayList<Map.Entry<String, Integer> >(wordCount.entrySet());
+
+			Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+				public int compare(
+						Map.Entry<String, Integer> entry1,
+						Map.Entry<String, Integer> entry2)
+				{
+					return entry1.getValue() - entry2.getValue();
+				}
+			});
 			
-			//Map key sorting
-			Map<String, Integer> sortedWordCount = wordCount.entrySet().stream()
-					.sorted(Comparator.comparingInt(e-> -e.getValue()))
-					.collect(Collectors.toMap(
-							Map.Entry::getKey,
-							Map.Entry::getValue,
-							(a, b) -> {throw new AssertionError(); },
-							LinkedHashMap::new
-							));
+			Collections.reverse(list);
 			
-			sortedWordCount.entrySet().forEach(System.out::println);
+			int elementCount = 1;
 			
+			for (Entry<String, Integer> a : list) {
+				System.out.println(a.getKey() + "\t -> " + a.getValue());
+				if(elementCount >= 20)
+					break;
+				elementCount++;
+			}
+
 	}
 }
