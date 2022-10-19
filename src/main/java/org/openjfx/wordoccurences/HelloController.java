@@ -26,7 +26,7 @@ public class HelloController implements Initializable {
 
             LinkedHashMap<String, Integer> wordCount = new LinkedHashMap<>();
 
-            while (scanner.hasNextLine()) {
+            while (scanner.hasNext()) {
                 String word = scanner.next();
                 word = word.toLowerCase();
                 word = word.replaceAll("[^a-zA-Z ]", "");
