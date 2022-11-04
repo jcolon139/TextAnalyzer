@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"org.openjfx.wordoccurences","l":"HelloApplication"},{"p":"org.openjfx.wordoccurences","l":"HelloController"}];updateSearchResults();
