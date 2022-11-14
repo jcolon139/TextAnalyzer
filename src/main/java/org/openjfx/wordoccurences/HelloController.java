@@ -9,7 +9,15 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class HelloController implements Initializable {
 
@@ -53,9 +61,17 @@ public class HelloController implements Initializable {
 
             Collections.reverse(list);
 
+            String url = "jdbc:mysql://localhost:3306/wordoccurrences";
+            String user = "root";
+            String password = "root";
+
+            Connection conn = DriverManager.getConnection(url, user, password);
+            Statement statement = conn.createStatement();
+
             int elementCount = 1;
 
             for (Map.Entry<String, Integer> a : list) {
+
                 a.getKey();
                 a.getValue();
 
@@ -65,10 +81,16 @@ public class HelloController implements Initializable {
                 if (elementCount >= 20)
                     break;
                 elementCount++;
+
+
+                statement.executeUpdate("insert into wordoccurrences.sqlwords (wordcount, words) values ("+a.getValue()+",'"+a.getKey()+"');");
+
             }
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fileChooser.setInitialDirectory(new File("\\C:\\Users\\jcol_\\Documents"));
